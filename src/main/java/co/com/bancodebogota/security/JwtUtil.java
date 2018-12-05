@@ -1,5 +1,8 @@
 package co.com.bancodebogota.security;
 
+import java.security.KeyPair;
+import java.security.PrivateKey;
+import java.security.PublicKey;
 import java.util.Collections;
 import java.util.Date;
 
@@ -11,14 +14,20 @@ import org.springframework.security.core.Authentication;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.impl.crypto.RsaProvider;
 
 public class JwtUtil {
+	
+	private static KeyPair kp = RsaProvider.generateKeyPair(2048);
+	private static PublicKey publicKey = kp.getPublic();
+	private static PrivateKey privateKey = kp.getPrivate();
 	
 	static void addAuthentication(HttpServletResponse res, String username) {
 		String token = Jwts.builder()
 				.setSubject(username)
 				.setExpiration(new Date(System.currentTimeMillis()+ 6000000))
-				.signWith(SignatureAlgorithm.HS512, "Mithr@ndir")
+				.signWith(SignatureAlgorithm.RS512, privateKey )
+				//.signWith(SignatureAlgorithm.HS512, "Mithr@ndir")
 				.compact();
 		res.addHeader("Authorization", "Bearer " + token);
 	}
@@ -27,7 +36,8 @@ public class JwtUtil {
 		String token = request.getHeader("Authorization");
 		if(token != null) {
 			String user = Jwts.parser()
-					.setSigningKey("Mithr@ndir")
+					.setSigningKey(publicKey)
+					//.setSigningKey("Mithr@ndir")
 					.parseClaimsJws(token.replace("Bearer", ""))
 					.getBody()
 					.getSubject();
