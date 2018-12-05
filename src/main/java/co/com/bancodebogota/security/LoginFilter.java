@@ -35,8 +35,7 @@ public class LoginFilter extends AbstractAuthenticationProcessingFilter {
 		InputStream body = request.getInputStream();
 
 		User user = new ObjectMapper().readValue(body, User.class);
-		
-		
+				
 		return getAuthenticationManager().authenticate(
 				new UsernamePasswordAuthenticationToken(
 						user.getUsername(),
@@ -52,8 +51,7 @@ public class LoginFilter extends AbstractAuthenticationProcessingFilter {
             HttpServletResponse res, FilterChain chain,
             Authentication auth) throws IOException, ServletException {
 
-        // Si la autenticacion fue exitosa, agregamos el token a la respuesta
-        JwtUtil.addAuthentication(res, auth.getName());
+        
     }
 	
 	

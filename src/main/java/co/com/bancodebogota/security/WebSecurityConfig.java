@@ -17,11 +17,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-		PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();		
-		 /*auth.inMemoryAuthentication()
-         .withUser("ask")
-         .password(encoder.encode("123"))
-         .roles("ADMIN");*/
 		auth.
 				ldapAuthentication()
 					.userDnPatterns("uid={0},ou=people")
@@ -41,17 +36,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 	protected void configure(HttpSecurity http) throws Exception {
 		http.csrf().disable().authorizeRequests()
 		.antMatchers("/login").permitAll()
+		.antMatchers("/key").permitAll()
 		.anyRequest().authenticated()
 		.and()
 		.addFilterBefore(new LoginFilter("/login", authenticationManager()),
-                UsernamePasswordAuthenticationFilter.class)
-		.addFilterBefore(new JwtFilter(), UsernamePasswordAuthenticationFilter.class);
-		/*
-		http
-		.authorizeRequests()
-			.anyRequest().fullyAuthenticated()
-			.and()
-		.httpBasic();*/
+                UsernamePasswordAuthenticationFilter.class);
 	}
 	
 }
