@@ -1,28 +1,27 @@
 package co.com.bancodebogota.security;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Collections;
-
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import co.com.bancodebogota.model.User;
+import co.com.bancodebogota.utils.DecryptUtil;
+
+
 
 public class LoginFilter extends AbstractAuthenticationProcessingFilter {
 
+	
+	private DecryptUtil decrypUtil = new DecryptUtil();
+	
 	public LoginFilter(String url, AuthenticationManager authManager) {
 		super(new AntPathRequestMatcher(url));
         setAuthenticationManager(authManager);
@@ -32,9 +31,19 @@ public class LoginFilter extends AbstractAuthenticationProcessingFilter {
 	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
 			throws AuthenticationException, IOException, ServletException {
 		
-		InputStream body = request.getInputStream();
-
-		User user = new ObjectMapper().readValue(body, User.class);
+		String input = request.getHeader("Authorization");
+		String credentials[] = input.split(":");
+		
+		User user = new User();
+		try {
+			user.setUsername(decrypUtil.decryptMessage(credentials[0]));
+			user.setPassword(decrypUtil.decryptMessage(credentials[1]));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
 				
 		return getAuthenticationManager().authenticate(
 				new UsernamePasswordAuthenticationToken(
@@ -53,6 +62,8 @@ public class LoginFilter extends AbstractAuthenticationProcessingFilter {
 
         
     }
+	
+	
 	
 	
 
