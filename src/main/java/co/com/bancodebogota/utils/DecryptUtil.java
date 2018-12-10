@@ -3,6 +3,7 @@ package co.com.bancodebogota.utils;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigInteger;
+import java.net.URL;
 import java.nio.file.Files;
 import java.security.GeneralSecurityException;
 import java.security.KeyFactory;
@@ -56,12 +57,15 @@ public class DecryptUtil {
 	}
 	
 	private String getKeyFromFile(String fileName) throws IOException {
+		
+		URL fileUrl = getClass().getResource("/"+fileName);
+		File file2 = new File(fileUrl.getFile());
 
-        ClassLoader classLoader = new DecryptUtil().getClass().getClassLoader();
+        //ClassLoader classLoader = new DecryptUtil().getClass().getClassLoader();
  
-        File file = new File(classLoader.getResource(fileName).getFile());
+        //File file = new File(classLoader.getResource(fileName).getFile());
          
-        String key = new String(Files.readAllBytes(file.toPath()));
+        String key = new String(Files.readAllBytes(file2.toPath()));
         return key;
 	}
 
