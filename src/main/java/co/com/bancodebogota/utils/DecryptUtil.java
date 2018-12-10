@@ -1,7 +1,10 @@
 package co.com.bancodebogota.utils;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.math.BigInteger;
 import java.net.URL;
 import java.nio.file.Files;
@@ -14,6 +17,9 @@ import java.security.spec.RSAPublicKeySpec;
 import java.util.Base64;
 
 import javax.crypto.Cipher;
+
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.InputStreamResource;
 
 public class DecryptUtil {
 	
@@ -57,16 +63,19 @@ public class DecryptUtil {
 	}
 	
 	private String getKeyFromFile(String fileName) throws IOException {
+		InputStream resource = new ClassPathResource(fileName).getInputStream();
 		
-		URL fileUrl = getClass().getResource("/"+fileName);
-		File file2 = new File(fileUrl.getFile());
-
-        //ClassLoader classLoader = new DecryptUtil().getClass().getClassLoader();
+		BufferedReader reader = new BufferedReader(new InputStreamReader(resource));
+		
+		
+		//ClassLoader classLoader = new DecryptUtil().getClass().getClassLoader();
  
         //File file = new File(classLoader.getResource(fileName).getFile());
          
-        String key = new String(Files.readAllBytes(file2.toPath()));
-        return key;
+        //String key = new String(Files.readAllBytes(file.toPath()));
+        String key = reader.readLine();
+		
+		return key;
 	}
 
 }
