@@ -36,7 +36,7 @@ public class LoginFilter extends AbstractAuthenticationProcessingFilter {
 	
 	static void addAuthentication(HttpServletResponse res, String username) {
 		RestTemplate restTemplate = new RestTemplate();
-		String token = restTemplate.getForObject("http://localhost:8090/getToken"+"/"+username, String.class);
+		String token = restTemplate.getForObject("http://tpkengeneratorbdb:8080/getToken"+"/"+username, String.class);
 		res.addHeader("Authorization", "Bearer " + token);
 	}
 	
