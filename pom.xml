@@ -60,6 +60,11 @@
 	        <groupId>com.unboundid</groupId>
 	        <artifactId>unboundid-ldapsdk</artifactId>
 	    </dependency>
+	    <dependency>
+			<groupId>com.microsoft.azure</groupId>
+			<artifactId>adal4j</artifactId>
+			<version>1.4.0</version>
+		</dependency>
 	    
 	</dependencies>
 

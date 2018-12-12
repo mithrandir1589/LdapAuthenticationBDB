@@ -1,5 +1,6 @@
 package co.com.bancodebogota.security;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -12,21 +13,12 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 
+	@Autowired
+	private CustomAuthenticationProvider customAuthenticationProvider;
+	
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-		auth.
-				ldapAuthentication()
-					.userDnPatterns("uid={0},ou=people")
-					.groupSearchBase("ou=groups")
-					.contextSource()
-						.url("ldap://localhost:8389/dc=springframework,dc=org")
-						.and()
-					.passwordCompare()
-						.passwordEncoder(new LdapShaPasswordEncoder())
-						.passwordAttribute("userPassword");
-		 
-		 
-		 
+		auth.authenticationProvider(customAuthenticationProvider);			
 	}
 
 	@Override
@@ -39,6 +31,5 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 		.and()
 		.addFilterBefore(new LoginFilter("/login", authenticationManager()),
                 UsernamePasswordAuthenticationFilter.class);
-	}
-	
+	}	
 }

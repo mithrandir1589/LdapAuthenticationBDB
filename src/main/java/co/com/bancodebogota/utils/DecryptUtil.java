@@ -66,14 +66,7 @@ public class DecryptUtil {
 		InputStream resource = new ClassPathResource(fileName).getInputStream();
 		
 		BufferedReader reader = new BufferedReader(new InputStreamReader(resource));
-		
-		
-		//ClassLoader classLoader = new DecryptUtil().getClass().getClassLoader();
- 
-        //File file = new File(classLoader.getResource(fileName).getFile());
-         
-        //String key = new String(Files.readAllBytes(file.toPath()));
-        String key = reader.readLine();
+		String key = reader.readLine();
 		
 		return key;
 	}
