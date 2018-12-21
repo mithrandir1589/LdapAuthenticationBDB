@@ -1,5 +1,6 @@
 package co.com.bancodebogota.security;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.Date;
@@ -8,6 +9,8 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.codec.binary.StringUtils;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -43,7 +46,6 @@ public class LoginFilter extends AbstractAuthenticationProcessingFilter {
 	@Override
 	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
 			throws AuthenticationException, IOException, ServletException {
-		
 		String input = request.getHeader("Authorization");
 		String credentials[] = input.split(":");
 		
