@@ -32,11 +32,12 @@ public class CustomAuthenticationProvider implements AuthenticationProvider{
 
 	private final String RESOURCE = "https://graph.microsoft.com";
     //Id de la aplicacion matriculada en Azure Active Directory
-	private final String CLIENT_ID = "37321a58-0f0b-4609-823e-ab52f2c6709c";
+	private final String CLIENT_ID = "c7faecbf-ed5d-4a12-a1f6-0c9d52643d57";
 	//URL a la cual se realiza el consumo post, 
-	private final String URL = "https://login.microsoftonline.com/a07fdf2f-2830-4856-9f78-cd1314c423df/oauth2/token";
+	private final String URL = "https://login.microsoftonline.com/0f599d33-5912-42f8-9edc-294e3642a137/oauth2/token";
+	
 	//Client secret de la aplicacion
-	private final String CLIENT_SECRET = "67vmEirVbnpLga+YdI9pmhpHi/Rx2Mw0keQFFly5kYY=";
+	private final String CLIENT_SECRET = "qnPlxJs27jiqjeocy62aDrh5S1TwHebi9Hwz4L2s/5U=";
 	
 	private final String GRANT_TYPE = "password";
 	
