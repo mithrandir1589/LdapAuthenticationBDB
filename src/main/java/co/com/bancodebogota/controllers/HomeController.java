@@ -10,6 +10,7 @@ import co.com.bancodebogota.services.KeyService;
 
 @RestController
 public class HomeController {
+	
 	@Autowired
 	private KeyService keyService;
 	
@@ -19,9 +20,4 @@ public class HomeController {
 		return keyService.getPublicKey();
 	}
 	
-	@GetMapping("/message")
-	public String getMessage(@RequestHeader("Authorization") String message) throws Exception {
-		return message;
-	}
-
 }

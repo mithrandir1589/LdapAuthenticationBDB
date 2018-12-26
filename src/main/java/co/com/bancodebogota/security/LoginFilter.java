@@ -1,16 +1,11 @@
 package co.com.bancodebogota.security;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.Collections;
-import java.util.Date;
-
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.apache.commons.codec.binary.StringUtils;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -18,11 +13,8 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.client.RestTemplate;
-
 import co.com.bancodebogota.model.User;
 import co.com.bancodebogota.utils.DecryptUtil;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 
 
 
@@ -39,7 +31,7 @@ public class LoginFilter extends AbstractAuthenticationProcessingFilter {
 	
 	static void addAuthentication(HttpServletResponse res, String username) {
 		RestTemplate restTemplate = new RestTemplate();
-		String token = restTemplate.getForObject("http://localhost:8090/getToken"+"/"+username, String.class);
+		String token = restTemplate.getForObject("http://tpkengeneratorbdb:8080/getToken"+"/"+username, String.class);
 		res.addHeader("Authorization", "Bearer " + token);
 	}
 	
@@ -57,8 +49,6 @@ public class LoginFilter extends AbstractAuthenticationProcessingFilter {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		
 				
 		return getAuthenticationManager().authenticate(
 				new UsernamePasswordAuthenticationToken(
@@ -74,12 +64,6 @@ public class LoginFilter extends AbstractAuthenticationProcessingFilter {
             HttpServletRequest req,
             HttpServletResponse res, FilterChain chain,
             Authentication auth) throws IOException, ServletException {
-		addAuthentication(res, auth.getName());
-        
+		addAuthentication(res, auth.getName());        
     }
-	
-	
-	
-	
-
 }

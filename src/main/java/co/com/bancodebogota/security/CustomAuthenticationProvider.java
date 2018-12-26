@@ -2,14 +2,9 @@ package co.com.bancodebogota.security;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -19,13 +14,8 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
-
-import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.JsonObject;
-import com.microsoft.aad.adal4j.AuthenticationContext;
-import com.microsoft.aad.adal4j.AuthenticationResult;
 
 @Component
 public class CustomAuthenticationProvider implements AuthenticationProvider{
@@ -59,6 +49,13 @@ public class CustomAuthenticationProvider implements AuthenticationProvider{
 		return authentication.equals(UsernamePasswordAuthenticationToken.class);
 	}
 	
+	/**
+	 * 
+	 * @param username Usuario (ya descifado) que intenta autenticarse
+	 * @param password Password (ya descrifrado) del usuario que intenta autenticarse
+	 * @return Objeto en formato JSON con la respuesta al consumo rest para obtener autenticacion. Retorna null si la autenticacion
+	 * no fue exitosa
+	 */
 	private JsonNode authenticateAzure(String username, String password){
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
