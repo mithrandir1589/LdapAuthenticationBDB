@@ -1,6 +1,7 @@
 package co.com.bancodebogota.security;
 
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -29,6 +30,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 		 
 	}
 
+	
+	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		/*http.csrf().disable().authorizeRequests()
@@ -51,16 +54,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 		                UsernamePasswordAuthenticationFilter.class);*/
 		
 		
-		http.authorizeRequests()
+		http.csrf().disable().authorizeRequests()
 		.antMatchers("/login").permitAll()
 		.antMatchers("/key").permitAll()
 		.antMatchers("/message").permitAll()
-		.anyRequest().fullyAuthenticated()
+		.anyRequest().authenticated()
 		.and()
 		.addFilterBefore(new LoginFilter("/login", authenticationManager()),
-                UsernamePasswordAuthenticationFilter.class)
-		.csrf().disable();
-		
+                UsernamePasswordAuthenticationFilter.class);
+
 	}
 	
 	
