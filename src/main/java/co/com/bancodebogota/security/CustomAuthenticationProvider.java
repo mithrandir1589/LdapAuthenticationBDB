@@ -32,11 +32,11 @@ public class CustomAuthenticationProvider implements AuthenticationProvider{
 	private final String GRANT_TYPE = "password";
 	
 	@Override
-	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+	public Authentication authenticate(Authentication authentication) throws AuthenticationException, RestClientException {
 		String username = (String) authentication.getPrincipal();
 		String password = (String) authentication.getCredentials();
+		JsonNode response = authenticateAzure(username, password);			
 		
-		JsonNode response = authenticateAzure(username, password);
 		
 		if(response == null) {
 			return null;
@@ -56,7 +56,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider{
 	 * @return Objeto en formato JSON con la respuesta al consumo rest para obtener autenticacion. Retorna null si la autenticacion
 	 * no fue exitosa
 	 */
-	private JsonNode authenticateAzure(String username, String password){
+	private JsonNode authenticateAzure(String username, String password) throws RestClientException{
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 		
@@ -76,14 +76,14 @@ public class CustomAuthenticationProvider implements AuthenticationProvider{
 		
 		HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String,String>>(map,headers);
 		
+		
+		response = restTemplate.postForObject(URL, request, String.class);
 		try {
-			response = restTemplate.postForObject(URL, request, String.class);
 			jsonResponse = mapper.readTree(response);
-		} catch (RestClientException rce) {
-			return null;
 		} catch (IOException e) {
-			return null;
+			e.printStackTrace();
 		}
+		
 
 		return jsonResponse;
 	}
