@@ -73,13 +73,6 @@ public final void doFilter(final ServletRequest req, final ServletResponse res, 
         LoginFilter.loginFilter = this;
 	}
 
-	
-	static void addAuthentication(HttpServletResponse res, String username) {
-		RestTemplate restTemplate = new RestTemplate();
-		String token = restTemplate.getForObject("http://localhost:9080/getToken"+"/"+username, String.class);
-		res.addHeader("Authorization", "Bearer " + token);
-	}
-	
 	@Override
 	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
 			throws AuthenticationException, IOException, ServletException {
@@ -111,14 +104,4 @@ public final void doFilter(final ServletRequest req, final ServletResponse res, 
 		
 		return authentication;
 	}
-	
-	@Override
-    protected void successfulAuthentication(
-            HttpServletRequest req,
-            HttpServletResponse res, FilterChain chain,
-            Authentication auth) throws IOException, ServletException {
-		addAuthentication(res, auth.getName());
-		System.out.println("Entro al successs");
-        
-    }
 }
