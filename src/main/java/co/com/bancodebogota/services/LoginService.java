@@ -35,7 +35,7 @@ public class LoginService {
 	
 	private String getToken(String username) {
 		RestTemplate restTemplate = new RestTemplate();
-		String token = restTemplate.getForObject("http://localhost:8080/getToken"+"/"+"pepo", String.class);
+		String token = restTemplate.getForObject("http://tpkengeneratorbdb:8080/getToken"+"/"+username, String.class);
 		return token;
 	}
 
